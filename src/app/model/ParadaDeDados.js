@@ -1,8 +1,8 @@
 export class ParadaDeDados{
-    constructor(nivel){
-        this.ParadaDeDadosFisico    =     this.getParadaDeDadosFisico(nivel);
-        this.ParadaDeDadosSociais   =     this.getParadaDeDadosSociais(nivel);
-        this.ParadaDeDadosMentais   =     this.getParadaDeDadosMentais(nivel);
+    constructor(nivel, arquetipo){
+        this.ParadaDeDadosFisico    =     this.getParadaDeDadosFisico(nivel, arquetipo);
+        this.ParadaDeDadosSociais   =     this.getParadaDeDadosSociais(nivel, arquetipo);
+        this.ParadaDeDadosMentais   =     this.getParadaDeDadosMentais(nivel, arquetipo);
     }
     getParadaDeDadosFisico(nivel, arquetipo){
         if (nivel === "Aprendiz" && arquetipo === "Hermetico"){

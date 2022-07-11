@@ -12,13 +12,16 @@ export class Personagem {
 
     getParadaDeDados(){
         return {
-            ParadaDeDadosFisico: this.ParadaDeDados.getParadaDeDadosFisico(this.nivel, this.arquetipo),
-            ParadaDeDadosSociais: this.ParadaDeDados.getParadaDeDadosSociais(this.nivel, this.arquetipo),
-            ParadaDeDadosMentais: this.ParadaDeDados.getParadaDeDadosMentais(this.nivel, this.arquetipo)
+            ParadaDeDadosFisico: this.ParadaDeDados.ParadaDeDadosFisico,
+            ParadaDeDadosSociais: this.ParadaDeDados.ParadaDeDadosSociais,
+            ParadaDeDadosMentais: this.ParadaDeDados.ParadaDeDadosMentais,
+            ParadaDeDadosZero: 0
         }
     }
 
     getParadigma() {
         return this.paradigma;
     }
+
+
 }
