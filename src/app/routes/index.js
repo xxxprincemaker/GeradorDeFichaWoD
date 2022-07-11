@@ -13,12 +13,19 @@ async function baseResponser(req, res) {
 }
 
 async function getPersonagem(req, res) {
-  const personagem = await personagemService.getPersonagem();
+  const personagem = await personagemService.getPersonagem(req.params.arquetipo, req.params.nivel);
   res.status(200).json(personagem);
 }
 
+async function something(req, res){
+  res.status(200).json({ message: 'ok' });
+}
 
+/*Rotas Iniciais da Pagina*/
 routes.get('/', baseResponser);
-routes.get('/x', getPersonagem);
+
+/*Rotas de Personagem*/
+routes.get('/x/:arquetipo/:nivel', getPersonagem);
+
 
 export default routes;

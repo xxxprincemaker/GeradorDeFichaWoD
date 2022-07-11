@@ -4,6 +4,7 @@ export class Paradigma {
     let crencaRandom = undefined;
     let praticaRandom = undefined;
     let instrumentoRandom = undefined;
+    this.getParadigmaRandomly();
   }
 
   //Create a method that returns randomly a crenca, a pratica and an instrumento with parameters
@@ -52,6 +53,9 @@ export class Paradigma {
       "A Mechanistic Cosmos",
       "Bring Back the Golden Age!",
       "We are all Gods in Desguise",
+      "Turning Keys to Reality",
+      "Ancient Wisdom is the Key",
+      "Transcend your Limits"
     ];
 
     switch (this.arquetipo) {
@@ -66,6 +70,8 @@ export class Paradigma {
       "Chaos Magick",
       "High Ritual Magick",
       "Dominion",
+      "Elementalism",
+      "God-Bonding"
     ];
 
     switch (this.arquetipo) {

@@ -6,7 +6,6 @@ export class Personagem {
         this.nivel = nivel;
         this.arquetipo = arquetipo;
         this.paradigma = new Paradigma(arquetipo);
-        this.paradigma = this.paradigma.getParadigmaRandomly();
         this.ParadaDeDados = new ParadaDeDados(nivel, arquetipo);
     }
 
@@ -22,6 +21,5 @@ export class Personagem {
     getParadigma() {
         return this.paradigma;
     }
-
 
 }
