@@ -20,6 +20,11 @@ async function getPersonagem(req, res) {
 async function something(req, res){
   res.status(200).json({ message: 'ok' });
 }
+async function getCrencas(req, res) {
+    const crencas = personagemService.getCrencas(req.params.page);
+    res.status(200).json(crencas);
+}
+
 
 /*Rotas Iniciais da Pagina*/
 routes.get('/', baseResponser);
@@ -27,5 +32,6 @@ routes.get('/', baseResponser);
 /*Rotas de Personagem*/
 routes.get('/x/:arquetipo/:nivel', getPersonagem);
 
+routes.get('/crencas/:page', getCrencas);
 
 export default routes;
