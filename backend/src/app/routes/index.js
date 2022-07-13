@@ -25,6 +25,16 @@ async function getCrencas(req, res) {
     res.status(200).json(crencas);
 }
 
+async function getPraticas(req, res) {
+    const praticas = await personagemService.getPraticas();
+    res.status(200).json(praticas);
+}
+
+async function getInstrumentos(req, res) {
+    const instrumentos = await personagemService.getInstrumentos();
+    res.status(200).json(instrumentos);
+}
+
 
 /*Rotas Iniciais da Pagina*/
 routes.get('/', baseResponser);
@@ -32,6 +42,9 @@ routes.get('/', baseResponser);
 /*Rotas de Personagem*/
 routes.get('/x/:arquetipo/:nivel', getPersonagem);
 
+/*Rotas de Crencas, Praticas e Instrumentos*/
 routes.get('/crencas/', getCrencas);
+routes.get('/praticas/', getPraticas);
+routes.get('/instrumentos/', getInstrumentos);
 
 export default routes;

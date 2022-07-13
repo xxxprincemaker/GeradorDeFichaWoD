@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueAxios from 'vue-axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:30000/api',
+  baseURL: process.env.VUE_APP_API_URL,
 });
 
 Vue.use(VueAxios, instance);

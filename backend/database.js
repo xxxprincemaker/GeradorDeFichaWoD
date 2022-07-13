@@ -7,7 +7,6 @@ const pool = new Pool(config.db);
 /**
  * Query the database using the pool
  * @param {*} query
- * @param {*} params
  *
  * @see https://node-postgres.com/features/pooling#single-query
  */

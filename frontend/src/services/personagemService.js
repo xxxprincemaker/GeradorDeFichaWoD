@@ -4,7 +4,18 @@ import Vue from 'vue';
 export default {
 
   getPersonagens(arquetipo, nivel) {
-    return Vue.axios.get(`http://localhost:30000/api/x/${arquetipo}/${nivel}`);
+    return Vue.axios.get(`/x/${arquetipo}/${nivel}`);
   },
 
+  getCrencas() {
+    return Vue.axios.get('/crencas');
+  },
+
+  getPraticas() {
+    return Vue.axios.get('/praticas');
+  },
+
+  getInstrumentos() {
+    return Vue.axios.get('/instrumentos');
+  },
 };
