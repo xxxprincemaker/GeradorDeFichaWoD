@@ -21,7 +21,7 @@ async function something(req, res){
   res.status(200).json({ message: 'ok' });
 }
 async function getCrencas(req, res) {
-    const crencas = personagemService.getCrencas(req.params.page);
+    const crencas = await personagemService.getCrencas();
     res.status(200).json(crencas);
 }
 
@@ -32,6 +32,6 @@ routes.get('/', baseResponser);
 /*Rotas de Personagem*/
 routes.get('/x/:arquetipo/:nivel', getPersonagem);
 
-routes.get('/crencas/:page', getCrencas);
+routes.get('/crencas/', getCrencas);
 
 export default routes;
