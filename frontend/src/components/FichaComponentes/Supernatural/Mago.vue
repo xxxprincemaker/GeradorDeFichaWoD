@@ -1,5 +1,8 @@
 <template>
   <v-container style="padding-left: 150px; padding-right: 150px">
+    <v-card-title class="justify-center">
+      Mage Template
+    </v-card-title>
     <v-autocomplete
       v-model="crencasSelecionadas"
       :items="crencas"

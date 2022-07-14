@@ -1,11 +1,13 @@
 <template>
+  <v-container>
 
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: "Vampiro"
-}
+  name: 'VampiroTemplate',
+};
 </script>
 
 <style scoped>

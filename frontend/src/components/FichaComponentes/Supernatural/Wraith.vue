@@ -1,11 +1,11 @@
 <template>
-
+  <v-container></v-container>
 </template>
 
 <script>
 export default {
-  name: "Wraith"
-}
+  name: 'WraithTemplate',
+};
 </script>
 
 <style scoped>
