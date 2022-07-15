@@ -73,10 +73,7 @@ export default {
       (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
     template: [{ text: 'ₓ', value: 'none' },
-      { text: 'Mage', value: 'Mage' }, {
-        text: 'Vampire',
-        value: 'Vampire',
-      }, { text: 'Werecreature', value: 'Werecreature' }, { text: 'Changeling', value: 'Changeling' }, { text: 'Wraith', value: 'Wraith' },
+      { text: 'Mage', value: 'Mage' }, { text: 'Vampire', value: 'Vampire' }, { text: 'Werecreature', value: 'Werecreature' }, { text: 'Changeling', value: 'Changeling' }, { text: 'Wraith', value: 'Wraith' },
       { text: 'Amenti', value: 'Mummy' }],
     templateSelected: { text: 'x', value: 'none' },
   }),

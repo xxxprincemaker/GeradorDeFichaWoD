@@ -19,18 +19,18 @@ export default {
     return Vue.axios.get('/instrumentos');
   },
 
-  async getTalents() : Promise<*> {
+  async getTalents() {
     const talents = await Vue.axios.get('/talents');
-    return talents.data
+    return talents.data;
   },
 
-  async getSkills() : Promise<*> {
+  async getSkills() {
     const skills = await Vue.axios.get('/skills');
-    return skills.data
+    return skills.data;
   },
 
-  async getKnowledges(): Promise<*> {
+  async getKnowledges() {
     const knowledges = await Vue.axios.get('/knowledges');
     return knowledges.data;
-  }
+  },
 };

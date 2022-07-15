@@ -1,8 +1,11 @@
 <template>
   <v-container class="align-self-lg-center justify-center" style="max-width: 300px">
     <v-row>
-      <v-col style="border-top-width: 10px; margin-top: 10px;">
+      <v-col style="border-top-width: 10px; margin-top: 10px;" v-if="isAttribute">
         {{ nome }}:
+      </v-col>
+      <v-col v-else style="border-top-width: 10px; margin-top: 10px;">
+        {{ nome.nome }}:
       </v-col>
       <v-col>
         <v-select
@@ -35,7 +38,11 @@
 <script>
 export default {
   name: 'NomeValorFicha',
-  props: { nome: String, isAttribute: { type: Boolean, default: false } },
+  props: {
+    nome: String,
+    isAttribute: { type: Boolean, default: false },
+    listaAbilities: { type: Array, default: () => [] },
+  },
   data: () => ({
     speciality: [],
     selected: { valor: 0, symbol: 'ₓ' },

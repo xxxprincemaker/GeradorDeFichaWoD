@@ -18,6 +18,9 @@ export default {
   components: {
     CharacterBasicInfo, Mago, Habilidades, Atributos,
   },
+  data: () => ({
+    characterSheet: {},
+  }),
 };
 </script>
 <style>
