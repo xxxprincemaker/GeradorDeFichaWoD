@@ -19,6 +19,18 @@ export default {
 
     async getInstrumentos() {
         return await db.query('SELECT * from "Instrumentos" order by "Instrumentos".nome ASC');
+    },
+
+    async getTalents(){
+        return await db.query('SELECT * from "Talents" order by "Talents".nome ASC');
+    },
+
+    async getSkills(){
+        return await db.query('SELECT * from "Skills" order by "Skills".nome ASC');
+    },
+
+    async getKnowledges(){
+        return await db.query('SELECT * from "Knowledges" order by "Knowledges".nome ASC');
     }
 
 }

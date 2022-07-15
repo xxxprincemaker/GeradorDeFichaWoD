@@ -29,7 +29,6 @@
             dense
           ></v-text-field>
         </v-col>
-
         <v-col
           cols="12"
           md="4"
@@ -41,6 +40,17 @@
             required
             dense
           ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-select
+          :items="template"
+          item-text="text"
+          item-value="value"
+          label="Template"
+          v-model="templateSelected"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -62,6 +72,13 @@ export default {
       (v) => !!v || 'E-mail is required',
       (v) => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
+    template: [{ text: 'ₓ', value: 'none' },
+      { text: 'Mage', value: 'Mage' }, {
+        text: 'Vampire',
+        value: 'Vampire',
+      }, { text: 'Werecreature', value: 'Werecreature' }, { text: 'Changeling', value: 'Changeling' }, { text: 'Wraith', value: 'Wraith' },
+      { text: 'Amenti', value: 'Mummy' }],
+    templateSelected: { text: 'x', value: 'none' },
   }),
 };
 </script>

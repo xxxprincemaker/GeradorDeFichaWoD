@@ -35,6 +35,21 @@ async function getInstrumentos(req, res) {
     res.status(200).json(instrumentos);
 }
 
+async function getTalents(req, res) {
+    const talents = await personagemService.getTalents();
+    res.status(200).json(talents);
+}
+
+async function getSkills(req, res) {
+    const skills = await personagemService.getSkills();
+    res.status(200).json(skills);
+}
+
+async function getKnowledges(req, res) {
+    const knowledges = await personagemService.getKnowledges();
+    res.status(200).json(knowledges);
+}
+
 
 /*Rotas Iniciais da Pagina*/
 routes.get('/', baseResponser);
@@ -46,5 +61,10 @@ routes.get('/x/:arquetipo/:nivel', getPersonagem);
 routes.get('/crencas/', getCrencas);
 routes.get('/praticas/', getPraticas);
 routes.get('/instrumentos/', getInstrumentos);
+
+/*Rotas de Abilities*/
+routes.get('/talents/', getTalents);
+routes.get('/skills/', getSkills);
+routes.get('/knowledges/', getKnowledges);
 
 export default routes;
