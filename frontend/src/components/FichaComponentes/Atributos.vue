@@ -33,8 +33,8 @@ export default {
   name: 'AtributosFicha',
   components: { NomeValorFicha },
   data: () => ({
-    atributosFisicos: ['Strentgh', 'Dexterity', 'Stamina'],
-    atributosSociais: ['Manipulation', 'Charisma', 'Apperance'],
+    atributosFisicos: ['Strength', 'Dexterity', 'Stamina'],
+    atributosSociais: ['Manipulation', 'Charisma', 'Appearance'],
     atributosMentais: ['Perception', 'Intelligence', 'Wits'],
   }),
 };
