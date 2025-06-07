@@ -7,7 +7,8 @@
     "dev": "nodemon ./server.js --ignore __tests__",
     "debug": "node --inspect-brk -r sucrase/register src/server.js",
     "build": "sucrase ./src -d ./dist --transforms imports",
-    "start": "node ./dist/server.js"
+    "start": "node ./dist/server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -26,5 +27,8 @@
     "typeorm": "^0.3.7",
     "vue": "^3.2.37",
     "youch": "^3.2.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
