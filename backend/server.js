@@ -1,5 +1,7 @@
 import app from './app.js';
 
-app.listen(process.env.PORT || 3333, () => {
-  console.log(`Server is onlinne on localhost:${process.env.PORT}`);
+const port = process.env.PORT || 3333;
+
+app.listen(port, () => {
+  console.log(`Server is online on localhost:${port}`);
 });
