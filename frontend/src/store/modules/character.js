@@ -309,7 +309,7 @@ const actions = {
   },
 
   // Save to localStorage
-  saveToLocalStorage({ stateArg }) {
+  saveToLocalStorage({ state: stateArg }) {
     try {
       const data = JSON.stringify(stateArg);
       localStorage.setItem(STORAGE_KEY, data);
