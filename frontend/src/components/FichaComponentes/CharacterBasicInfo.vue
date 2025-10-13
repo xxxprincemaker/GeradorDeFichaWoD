@@ -58,16 +58,15 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   data: () => ({
     valid: false,
-    firstname: '',
-    lastname: '',
     nameRules: [
       (v) => !!v || 'Name is required',
       (v) => v.length <= 10 || 'Name must be less than 10 characters',
     ],
-    email: '',
     emailRules: [
       (v) => !!v || 'E-mail is required',
       (v) => /.+@.+/.test(v) || 'E-mail must be valid',
@@ -75,8 +74,45 @@ export default {
     template: [{ text: 'ₓ', value: 'none' },
       { text: 'Mage', value: 'Mage' }, { text: 'Vampire', value: 'Vampire' }, { text: 'Werecreature', value: 'Werecreature' }, { text: 'Changeling', value: 'Changeling' }, { text: 'Wraith', value: 'Wraith' },
       { text: 'Amenti', value: 'Mummy' }],
-    templateSelected: { text: 'x', value: 'none' },
   }),
+  computed: {
+    ...mapGetters('character', ['basicInfo']),
+    firstname: {
+      get() {
+        return this.basicInfo.firstName;
+      },
+      set(value) {
+        this.updateBasicInfo({ firstName: value });
+      },
+    },
+    lastname: {
+      get() {
+        return this.basicInfo.lastName;
+      },
+      set(value) {
+        this.updateBasicInfo({ lastName: value });
+      },
+    },
+    email: {
+      get() {
+        return this.basicInfo.email;
+      },
+      set(value) {
+        this.updateBasicInfo({ email: value });
+      },
+    },
+    templateSelected: {
+      get() {
+        return this.basicInfo.template;
+      },
+      set(value) {
+        this.updateBasicInfo({ template: value });
+      },
+    },
+  },
+  methods: {
+    ...mapActions('character', ['updateBasicInfo']),
+  },
 };
 </script>
 

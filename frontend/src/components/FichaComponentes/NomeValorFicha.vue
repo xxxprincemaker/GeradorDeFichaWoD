@@ -1,34 +1,19 @@
 <template>
   <v-container class="align-self-lg-center justify-center" style="max-width: 300px">
     <v-row>
-      <v-col style="border-top-width: 10px; margin-top: 10px;" v-if="isAttribute">
-        {{ nome }}:
-      </v-col>
-      <v-col v-else style="border-top-width: 10px; margin-top: 10px;">
-        {{ nome.nome }}:
+      <v-col style="border-top-width: 10px; margin-top: 10px;">
+        {{ displayName }}:
       </v-col>
       <v-col>
         <v-select
-        :items="items"
-        v-model="selectedAttribute"
-        item-text="symbol"
-        item-value="valor"
-        v-if="isAttribute"
-        style="font-size: x-large; text-align: center"
-        dense
-        color="purple"
-        flat
-        />
-        <v-select
           :items="items"
-          v-model="selected"
+          v-model="localValue"
           item-text="symbol"
           item-value="valor"
           style="font-size: x-large; text-align: center"
           dense
           color="purple"
           flat
-          v-else
         />
       </v-col>
     </v-row>
@@ -39,14 +24,14 @@
 export default {
   name: 'NomeValorFicha',
   props: {
-    nome: String,
+    nome: [String, Object],
     isAttribute: { type: Boolean, default: false },
     listaAbilities: { type: Array, default: () => [] },
+    category: { type: String, default: '' },
+    value: { type: Number, default: 0 },
   },
   data: () => ({
     speciality: [],
-    selected: { valor: 0, symbol: 'ₓ' },
-    selectedAttribute: { valor: 1, symbol: '•' },
     items: [
       { valor: 0, symbol: 'ₓ' },
       { valor: 1, symbol: '•' },
@@ -61,6 +46,27 @@ export default {
       { valor: 10, symbol: '••••• •••••' },
     ],
   }),
+  computed: {
+    localValue: {
+      get() {
+        if (this.isAttribute) {
+          return this.value || 1;
+        }
+        return this.value || 0;
+      },
+      set(newValue) {
+        const name = typeof this.nome === 'string' ? this.nome : this.nome.nome;
+        this.$emit('update', {
+          category: this.category,
+          name,
+          value: newValue,
+        });
+      },
+    },
+    displayName() {
+      return typeof this.nome === 'string' ? this.nome : this.nome.nome;
+    },
+  },
 };
 </script>
 

@@ -7,16 +7,25 @@
       <v-col>
         <NomeValorFicha
           :nome="talents[i]"
+          :category="'talents'"
+          :value="getAbility('talents', talents[i].nome)"
+          @update="updateAbility"
         />
       </v-col>
       <v-col>
         <NomeValorFicha
           :nome="skills[i]"
+          :category="'skills'"
+          :value="getAbility('skills', skills[i].nome)"
+          @update="updateAbility"
         />
       </v-col>
       <v-col>
         <NomeValorFicha
           :nome="knowledges[i]"
+          :category="'knowledges'"
+          :value="getAbility('knowledges', knowledges[i].nome)"
+          @update="updateAbility"
         />
       </v-col>
     </v-row>
@@ -24,32 +33,25 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import NomeValorFicha from '@/components/FichaComponentes/NomeValorFicha.vue';
-import personagemService from '@/services/personagemService';
+import talentsData from '@/data/talents';
+import skillsData from '@/data/skills';
+import knowledgesData from '@/data/knowledges';
 
 export default {
   name: 'HabilidadesFicha',
   components: { NomeValorFicha },
   data: () => ({
-    talents: { nome: '' },
-    skills: { nome: '' },
-    knowledges: { nome: '' },
+    talents: talentsData,
+    skills: skillsData,
+    knowledges: knowledgesData,
   }),
-  methods: {
-    async getKnowledges() {
-      this.knowledges = await personagemService.getKnowledges();
-    },
-    async getTalents() {
-      this.talents = await personagemService.getTalents();
-    },
-    async getSkills() {
-      this.skills = await personagemService.getSkills();
-    },
+  computed: {
+    ...mapGetters('character', ['getAbility']),
   },
-  mounted() {
-    this.getTalents();
-    this.getSkills();
-    this.getKnowledges();
+  methods: {
+    ...mapActions('character', ['updateAbility']),
   },
 };
 </script>
