@@ -5,15 +5,11 @@
         {{ displayName }}:
       </v-col>
       <v-col>
-        <v-select
-          :items="items"
-          v-model="localValue"
-          item-text="symbol"
-          item-value="valor"
-          style="font-size: x-large; text-align: center"
-          dense
-          color="purple"
-          flat
+        <DotRating
+          :value="localValue"
+          :max-dots="10"
+          :min-value="isAttribute ? 1 : 0"
+          @input="handleDotClick"
         />
       </v-col>
     </v-row>
@@ -21,8 +17,13 @@
 </template>
 
 <script>
+import DotRating from './DotRating.vue';
+
 export default {
   name: 'NomeValorFicha',
+  components: {
+    DotRating,
+  },
   props: {
     nome: [String, Object],
     isAttribute: { type: Boolean, default: false },
@@ -30,41 +31,25 @@ export default {
     category: { type: String, default: '' },
     value: { type: Number, default: 0 },
   },
-  data: () => ({
-    speciality: [],
-    items: [
-      { valor: 0, symbol: 'ₓ' },
-      { valor: 1, symbol: '•' },
-      { valor: 2, symbol: '••' },
-      { valor: 3, symbol: '•••' },
-      { valor: 4, symbol: '••••' },
-      { valor: 5, symbol: '•••••' },
-      { valor: 6, symbol: '••••• •' },
-      { valor: 7, symbol: '••••• ••' },
-      { valor: 8, symbol: '••••• •••' },
-      { valor: 9, symbol: '••••• ••••' },
-      { valor: 10, symbol: '••••• •••••' },
-    ],
-  }),
   computed: {
-    localValue: {
-      get() {
-        if (this.isAttribute) {
-          return this.value || 1;
-        }
-        return this.value || 0;
-      },
-      set(newValue) {
-        const name = typeof this.nome === 'string' ? this.nome : this.nome.nome;
-        this.$emit('update', {
-          category: this.category,
-          name,
-          value: newValue,
-        });
-      },
+    localValue() {
+      if (this.isAttribute) {
+        return this.value || 1;
+      }
+      return this.value || 0;
     },
     displayName() {
       return typeof this.nome === 'string' ? this.nome : this.nome.nome;
+    },
+  },
+  methods: {
+    handleDotClick(newValue) {
+      const name = typeof this.nome === 'string' ? this.nome : this.nome.nome;
+      this.$emit('update', {
+        category: this.category,
+        name,
+        value: newValue,
+      });
     },
   },
 };
