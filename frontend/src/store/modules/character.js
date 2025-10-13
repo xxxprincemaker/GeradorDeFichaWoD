@@ -83,6 +83,11 @@ const getDefaultState = () => ({
         social: 0,
         mental: 0,
       },
+      priorities: {
+        physical: null, // 'primary', 'secondary', or 'tertiary'
+        social: null,
+        mental: null,
+      },
     },
     abilities: {
       primary: STARTING_POINTS.abilities.primary,
@@ -92,6 +97,11 @@ const getDefaultState = () => ({
         talents: 0,
         skills: 0,
         knowledges: 0,
+      },
+      priorities: {
+        talents: null, // 'primary', 'secondary', or 'tertiary'
+        skills: null,
+        knowledges: null,
       },
     },
     freebie: {
@@ -134,28 +144,68 @@ const getters = {
   advantages: (stateArg) => stateArg.advantages,
 
   // Points
-  pointsRemaining: (stateArg) => ({
-    attributes: {
-      primary: stateArg.points.attributes.primary
-        - stateArg.points.attributes.spent.physical,
-      secondary: stateArg.points.attributes.secondary
-        - stateArg.points.attributes.spent.social,
-      tertiary: stateArg.points.attributes.tertiary
-        - stateArg.points.attributes.spent.mental,
-    },
-    abilities: {
-      primary: stateArg.points.abilities.primary
-        - stateArg.points.abilities.spent.talents,
-      secondary: stateArg.points.abilities.secondary
-        - stateArg.points.abilities.spent.skills,
-      tertiary: stateArg.points.abilities.tertiary
-        - stateArg.points.abilities.spent.knowledges,
-    },
-    freebie: stateArg.points.freebie.total - stateArg.points.freebie.spent,
-    experience: stateArg.points.experience.total - stateArg.points.experience.spent,
-  }),
+  pointsRemaining: (stateArg) => {
+    const attributePoints = {};
+    const abilityPoints = {};
+
+    // Calculate attribute points based on priorities
+    ['physical', 'social', 'mental'].forEach((category) => {
+      const priority = stateArg.points.attributes.priorities[category];
+      let available = 0;
+      if (priority === 'primary') {
+        available = stateArg.points.attributes.primary;
+      } else if (priority === 'secondary') {
+        available = stateArg.points.attributes.secondary;
+      } else if (priority === 'tertiary') {
+        available = stateArg.points.attributes.tertiary;
+      }
+      attributePoints[category] = available - stateArg.points.attributes.spent[category];
+    });
+
+    // Calculate ability points based on priorities
+    ['talents', 'skills', 'knowledges'].forEach((category) => {
+      const priority = stateArg.points.abilities.priorities[category];
+      let available = 0;
+      if (priority === 'primary') {
+        available = stateArg.points.abilities.primary;
+      } else if (priority === 'secondary') {
+        available = stateArg.points.abilities.secondary;
+      } else if (priority === 'tertiary') {
+        available = stateArg.points.abilities.tertiary;
+      }
+      abilityPoints[category] = available - stateArg.points.abilities.spent[category];
+    });
+
+    return {
+      attributes: attributePoints,
+      abilities: abilityPoints,
+      freebie: stateArg.points.freebie.total - stateArg.points.freebie.spent,
+      experience: stateArg.points.experience.total - stateArg.points.experience.spent,
+    };
+  },
 
   pointsSpent: (stateArg) => stateArg.points,
+
+  // Get priorities
+  attributePriorities: (stateArg) => stateArg.points.attributes.priorities,
+  abilityPriorities: (stateArg) => stateArg.points.abilities.priorities,
+
+  // Check if basic allocation is complete
+  isBasicAllocationComplete: (stateArg) => {
+    // Check if all priorities are assigned
+    const attrPriorities = stateArg.points.attributes.priorities;
+    const abilPriorities = stateArg.points.abilities.priorities;
+
+    const allAttrPrioritiesSet = attrPriorities.physical
+      && attrPriorities.social
+      && attrPriorities.mental;
+
+    const allAbilPrioritiesSet = abilPriorities.talents
+      && abilPriorities.skills
+      && abilPriorities.knowledges;
+
+    return allAttrPrioritiesSet && allAbilPrioritiesSet;
+  },
 
   creationStep: (stateArg) => stateArg.creationStep,
 
@@ -174,14 +224,30 @@ const mutations = {
   // Attribute mutations
   SET_ATTRIBUTE(stateArg, { category, name, value }) {
     if (!stateArg.attributes[category]) return;
+
+    const oldValue = stateArg.attributes[category][name] || 1;
     stateArg.attributes[category][name] = value;
+
+    // Auto-track spent points (attributes start at 1, so count dots above 1)
+    const currentSpent = stateArg.points.attributes.spent[category];
+    const valueDiff = (value - 1) - (oldValue - 1);
+    stateArg.points.attributes.spent[category] = currentSpent + valueDiff;
+
     stateArg.lastModified = Date.now();
   },
 
   // Ability mutations
   SET_ABILITY(stateArg, { category, name, value }) {
     if (!stateArg.abilities[category]) return;
+
+    const oldValue = stateArg.abilities[category][name] || 0;
     stateArg.abilities[category][name] = value;
+
+    // Auto-track spent points
+    const currentSpent = stateArg.points.abilities.spent[category];
+    const valueDiff = value - oldValue;
+    stateArg.points.abilities.spent[category] = currentSpent + valueDiff;
+
     stateArg.lastModified = Date.now();
   },
 
@@ -206,6 +272,21 @@ const mutations = {
       } else {
         stateArg.points[category].spent = value;
       }
+    }
+    stateArg.lastModified = Date.now();
+  },
+
+  // Set attribute or ability priority
+  SET_PRIORITY(stateArg, { category, subcategory, priority }) {
+    if (stateArg.points[category] && stateArg.points[category].priorities) {
+      // Clear the priority from other subcategories
+      Object.keys(stateArg.points[category].priorities).forEach((key) => {
+        if (stateArg.points[category].priorities[key] === priority) {
+          stateArg.points[category].priorities[key] = null;
+        }
+      });
+      // Set the new priority
+      stateArg.points[category].priorities[subcategory] = priority;
     }
     stateArg.lastModified = Date.now();
   },
@@ -287,6 +368,12 @@ const actions = {
   // Update points spent
   updatePointsSpent({ commit, dispatch }, payload) {
     commit('SET_POINTS_SPENT', payload);
+    dispatch('saveToLocalStorage');
+  },
+
+  // Set priority for attributes or abilities
+  setPriority({ commit, dispatch }, payload) {
+    commit('SET_PRIORITY', payload);
     dispatch('saveToLocalStorage');
   },
 

@@ -4,6 +4,7 @@
     <CharacterBasicInfo />
     <Atributos/>
     <Habilidades/>
+    <Advantages/>
     <Mago/>
   </v-container>
 </template>
@@ -12,6 +13,7 @@
 import { mapActions } from 'vuex';
 import Atributos from '@/components/FichaComponentes/Atributos.vue';
 import Habilidades from '@/components/FichaComponentes/Habilidades.vue';
+import Advantages from '@/components/FichaComponentes/Advantages.vue';
 import Mago from '@/components/FichaComponentes/Supernatural/Mago.vue';
 import CharacterBasicInfo from '@/components/FichaComponentes/CharacterBasicInfo.vue';
 import PointTracker from '@/components/FichaComponentes/PointTracker.vue';
@@ -19,7 +21,7 @@ import PointTracker from '@/components/FichaComponentes/PointTracker.vue';
 export default {
   name: 'FichaPersonagem',
   components: {
-    PointTracker, CharacterBasicInfo, Mago, Habilidades, Atributos,
+    PointTracker, CharacterBasicInfo, Advantages, Mago, Habilidades, Atributos,
   },
   data: () => ({
     characterSheet: {},

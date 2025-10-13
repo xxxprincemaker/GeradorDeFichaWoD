@@ -8,20 +8,59 @@
         <v-row>
           <v-col cols="12" md="6">
             <h3 class="mb-2">Creation Points</h3>
+
+            <!-- Basic Allocation Status -->
+            <v-alert
+              :type="isBasicAllocationComplete ? 'success' : 'info'"
+              dense
+              class="mb-3"
+            >
+              <strong>Status:</strong>
+              {{
+                isBasicAllocationComplete
+                  ? 'Alocação básica completa - Pontos de bônus disponíveis!'
+                  : 'Defina as prioridades e distribua os pontos'
+              }}
+            </v-alert>
+
             <div class="mb-2">
               <strong>Attributes:</strong>
               <div class="ml-4">
-                <span>Physical: {{ pointsRemaining.attributes.primary }}</span><br>
-                <span>Social: {{ pointsRemaining.attributes.secondary }}</span><br>
-                <span>Mental: {{ pointsRemaining.attributes.tertiary }}</span>
+                <span>
+                  Physical ({{ getPriorityLabel(displayAttributePoints.physical.priority) }}):
+                  {{ displayAttributePoints.physical.remaining }}
+                  / {{ displayAttributePoints.physical.total }}
+                </span><br>
+                <span>
+                  Social ({{ getPriorityLabel(displayAttributePoints.social.priority) }}):
+                  {{ displayAttributePoints.social.remaining }}
+                  / {{ displayAttributePoints.social.total }}
+                </span><br>
+                <span>
+                  Mental ({{ getPriorityLabel(displayAttributePoints.mental.priority) }}):
+                  {{ displayAttributePoints.mental.remaining }}
+                  / {{ displayAttributePoints.mental.total }}
+                </span>
               </div>
             </div>
             <div class="mb-2">
               <strong>Abilities:</strong>
               <div class="ml-4">
-                <span>Talents: {{ pointsRemaining.abilities.primary }}</span><br>
-                <span>Skills: {{ pointsRemaining.abilities.secondary }}</span><br>
-                <span>Knowledges: {{ pointsRemaining.abilities.tertiary }}</span>
+                <span>
+                  Talents ({{ getPriorityLabel(displayAbilityPoints.talents.priority) }}):
+                  {{ displayAbilityPoints.talents.remaining }}
+                  / {{ displayAbilityPoints.talents.total }}
+                </span><br>
+                <span>
+                  Skills ({{ getPriorityLabel(displayAbilityPoints.skills.priority) }}):
+                  {{ displayAbilityPoints.skills.remaining }}
+                  / {{ displayAbilityPoints.skills.total }}
+                </span><br>
+                <span>
+                  Knowledges ({{ getPriorityLabel(displayAbilityPoints.knowledges.priority) }}):
+                  {{ displayAbilityPoints.knowledges.remaining }}
+                  / {{ displayAbilityPoints.knowledges.total }}
+                </span>
               </div>
             </div>
           </v-col>
@@ -67,7 +106,29 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'PointTracker',
   computed: {
-    ...mapGetters('character', ['pointsRemaining', 'pointsSpent']),
+    ...mapGetters('character', [
+      'pointsRemaining',
+      'pointsSpent',
+      'attributePriorities',
+      'abilityPriorities',
+      'isBasicAllocationComplete',
+    ]),
+    displayAttributePoints() {
+      const priorities = this.attributePriorities;
+      return {
+        physical: this.getPointsForCategory('attributes', 'physical', priorities.physical),
+        social: this.getPointsForCategory('attributes', 'social', priorities.social),
+        mental: this.getPointsForCategory('attributes', 'mental', priorities.mental),
+      };
+    },
+    displayAbilityPoints() {
+      const priorities = this.abilityPriorities;
+      return {
+        talents: this.getPointsForCategory('abilities', 'talents', priorities.talents),
+        skills: this.getPointsForCategory('abilities', 'skills', priorities.skills),
+        knowledges: this.getPointsForCategory('abilities', 'knowledges', priorities.knowledges),
+      };
+    },
   },
   methods: {
     ...mapActions('character', ['addExperience', 'resetCharacter', 'clearLocalStorage']),
@@ -80,6 +141,28 @@ export default {
         this.clearLocalStorage();
         this.resetCharacter();
       }
+    },
+    getPointsForCategory(type, category, priority) {
+      const remaining = this.pointsRemaining[type]?.[category] || 0;
+      let total = 0;
+
+      if (type === 'attributes') {
+        if (priority === 'primary') total = this.pointsSpent.attributes.primary;
+        else if (priority === 'secondary') total = this.pointsSpent.attributes.secondary;
+        else if (priority === 'tertiary') total = this.pointsSpent.attributes.tertiary;
+      } else if (type === 'abilities') {
+        if (priority === 'primary') total = this.pointsSpent.abilities.primary;
+        else if (priority === 'secondary') total = this.pointsSpent.abilities.secondary;
+        else if (priority === 'tertiary') total = this.pointsSpent.abilities.tertiary;
+      }
+
+      return { remaining, total, priority };
+    },
+    getPriorityLabel(priority) {
+      if (priority === 'primary') return 'Primária';
+      if (priority === 'secondary') return 'Secundária';
+      if (priority === 'tertiary') return 'Terciária';
+      return 'Não definida';
     },
   },
 };
